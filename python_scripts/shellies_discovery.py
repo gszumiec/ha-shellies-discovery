@@ -334,6 +334,7 @@ TOPIC_RELAY = "relay"
 TOPIC_STATUS = "status"
 
 TPL_BATTERY = "{{value|float|round}}"
+TPL_BATTERY_FROM_JSON = "{{value_json.bat}}"
 TPL_CONCENTRATION = "{%if 0<=value|int<=65535%}{{value}}{%endif%}"
 TPL_CURRENT = "{{value|float|round(2)}}"
 TPL_DOUBLE_SHORTPUSH = "{%if value_json.event==^SS^%}ON{%else%}OFF{%endif%}"
@@ -416,7 +417,11 @@ ROLLER_DEVICE_CLASSES = [
 
 def parse_version(version):
     """Parse version string and return version date integer."""
-    return int(version.split("-", 1)[0])
+    try:
+        if "-" in version:
+            return int(version.split("-", 1)[0])
+    except TypeError:
+        return version
 
 
 def get_device_config(dev_id):
